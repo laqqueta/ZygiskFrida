@@ -27,7 +27,7 @@ task downloadFrida(type: Download) {
     }
 
     def outputs = magiskArchs.collect{
-        arch ->  "libgadget-${arch}.so.xz".toString()
+        arch ->  "libgadget-x86_64.so.xz".toString()
     }
 
     def downloads = [sources, outputs].transpose().collectEntries()
