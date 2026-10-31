@@ -18,23 +18,19 @@ dependencies {
     implementation("io.github.vvb2060.ndk:dobby:1.2")
 }
 
-task downloadFrida(type: Download) {
-    def downloadArchs = ["x86_64"]
-    def magiskArchs = ["x64"]
-
-    def sources = "https://github.com/frida/frida/releases/download/${fridaVersion}/frida-gadget-${fridaVersion}-android-x86_64.so.xz".toString()
-
-    def outputs = "libgadget-x86_64.so.xz".toString()
-
-    def downloads = [sources, outputs].transpose().collectEntries()
-
-    src downloads.keySet()
-    dest "$rootDir/gadget"
-    overwrite true
-    onlyIfModified true
-    quiet true
-    eachFile { f ->
-        f.name = downloads[f.sourceURL.toString()]
+task downloadFrida {
+    doLast {
+        def downloadArchs = ["x86_64"]
+        def magiskArchs = ["x64"]
+        
+        // Map arches to their respective remote URLs and target output names
+        downloadArchs.eachWithIndex { arch, index ->
+            def version = project.hasProperty('fridaVersion') ? fridaVersion : "17.25.0" // fallback or your variable
+            def url = "https://github.com/frida/frida/releases/download/${version}/frida-gadget-${version}-android-${arch}.so.xz"
+            def outputName = "libgadget-${magiskArchs[index]}.so.xz"
+            
+            ant.get(src: url, dest: file("$rootDir/gadget/$outputName"), skipexisting: false)
+        }
     }
 }
 
