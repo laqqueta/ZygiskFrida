@@ -22,13 +22,9 @@ task downloadFrida(type: Download) {
     def downloadArchs = ["x86_64"]
     def magiskArchs = ["x64"]
 
-    def sources = downloadArchs.collect{
-        arch -> "https://github.com/frida/frida/releases/download/${fridaVersion}/frida-gadget-${fridaVersion}-android-${arch}.so.xz".toString()
-    }
+    def sources = "https://github.com/frida/frida/releases/download/${fridaVersion}/frida-gadget-${fridaVersion}-android-x86_64.so.xz".toString()
 
-    def outputs = magiskArchs.collect{
-        arch ->  "libgadget-${arch}.so.xz".toString()
-    }
+    def outputs = "libgadget-x86_64.so.xz".toString()
 
     def downloads = [sources, outputs].transpose().collectEntries()
 
